@@ -25,11 +25,11 @@ class _AlunosPageState extends State<AlunosPage> {
           bottom: const TabBar(
             tabs: [
               Tab(
-                icon: Icon(Icons.stacked_line_chart),
+                icon: Icon(Icons.edit_note_outlined),
                 text: 'Cadastro',
               ),
               Tab(
-                icon: Icon(Icons.emoji_emotions),
+                icon: Icon(Icons.class_sharp),
                 text: 'Plano de aula',
               ),
             ],
@@ -40,20 +40,33 @@ class _AlunosPageState extends State<AlunosPage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const Padding(padding: EdgeInsets.only(top: 24)),
+              Text('Matrícula: ${widget.aluno.matricula}',
+                  style: const TextStyle(
+                      fontSize: 22,
+                      fontFamily: 'Verdana',
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold)),
               Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: ListTile(
-                    title: Text(widget.aluno.matricula),
-                    subtitle: Text(
-                      ' ${widget.aluno.nome} - ${widget.aluno.responsavel} - ${widget.aluno.telefone}',
-                      style: const TextStyle(fontSize: 22),
-                    ),
-                    trailing: IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.phone)),
-                  )),
+                padding: const EdgeInsets.all(24),
+                child: ListTile(
+                  title: Text(widget.aluno.matricula),
+                  subtitle: Text(
+                    ' ${widget.aluno.nome} - ${widget.aluno.responsavel} - ${widget.aluno.telefone}',
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                  trailing: IconButton(
+                      onPressed: () {}, icon: const Icon(Icons.phone)),
+                ),
+              ),
             ],
           ),
-          Container(),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Image.asset('images/planoaula.jpeg'),
+            ],
+          ),
         ]),
       ),
     );

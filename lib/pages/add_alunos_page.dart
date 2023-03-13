@@ -12,6 +12,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
   String _name = '';
   int _age = 0;
   String _email = '';
+  String _phone = '';
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                   _name = value!;
                 },
               ),
+              const SizedBox(height: 20),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Idade'),
                 validator: (value) {
@@ -53,6 +55,20 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                   _age = int.parse(value!);
                 },
               ),
+              const SizedBox(height: 20),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Responsável'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor insira o nome!!';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _name = value!;
+                },
+              ),
+              const SizedBox(height: 20),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
@@ -73,15 +89,12 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                 decoration: const InputDecoration(labelText: 'Endereço'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Por favor insira seu email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Por favor insira um email válido';
+                    return 'Por favor insira o endereço';
                   }
                   return null;
                 },
                 onSaved: (value) {
-                  _email = value!;
+                  _name = value!;
                 },
               ),
               const SizedBox(height: 20),
@@ -89,31 +102,15 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                 decoration: const InputDecoration(labelText: 'Telefone'),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Por favor insira seu email';
+                    return 'Por favor insira o telefone';
                   }
-                  if (!value.contains('@')) {
-                    return 'Por favor insira um email válido';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Responsável'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira seu email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Por favor insira um email válido';
+                  if (value.length < 8) {
+                    return 'Por favor insira um telefone válido';
                   }
                   return null;
                 },
                 onSaved: (value) {
-                  _email = value!;
+                  _phone = value!;
                 },
               ),
               const SizedBox(height: 20),
@@ -128,6 +125,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                     print('Name: $_name');
                     print('Age: $_age');
                     print('Email: $_email');
+                    print('Email: $_phone');
                   }
                 },
                 child: const Text('Cadastrar'),

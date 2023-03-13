@@ -61,6 +61,18 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddAlunosPage(),
+            ),
+          );
+        },
+        backgroundColor: Colors.pinkAccent,
+        child: const Icon(Icons.add_reaction),
+      ),
       drawer: Drawer(
         elevation: 3,
         child: Container(
@@ -76,9 +88,7 @@ class _HomePageState extends State<HomePage> {
                 accountName: Text('Brincando e Aprendendo'),
                 accountEmail: Text('email@email.com'),
                 currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcVGPjfa1WqqpaNsGwyKapJs52bDwI_QXGQE_iCV2vPA&s',
-                  ),
+                  backgroundImage: AssetImage('images/tiaval.jpeg'),
                 ),
                 decoration: BoxDecoration(
                     gradient: SweepGradient(colors: Colors.primaries)),
@@ -86,15 +96,30 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListTile(
-                    title: const Text('Cadastro do aluno.'),
-                    leading: const Icon(Icons.child_care),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddAlunosPage()),
-                      );
-                    }),
+                  title: const Text('Cadastro do aluno.'),
+                  leading: const Icon(Icons.child_care),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddAlunosPage()),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: const Text('Cadastro de atividades.'),
+                  leading: const Icon(Icons.document_scanner_rounded),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddAlunosPage()),
+                    );
+                  },
+                ),
               ),
             ],
           ),

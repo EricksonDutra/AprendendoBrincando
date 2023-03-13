@@ -44,7 +44,49 @@ class AlunosRepository extends ChangeNotifier {
         telefone: "679980900",
         dataNascimento: '',
         matricula: '',
-      )
+      ),
+      Aluno(
+        nome: "Fulano de tal2",
+        responsavel: "Seus pai22s",
+        telefone: "67999999299",
+        dataNascimento: '',
+        matricula: '',
+      ),
+      Aluno(
+        nome: "Cicraninho",
+        responsavel: "Suas mães",
+        telefone: "679980900",
+        dataNascimento: '',
+        matricula: '',
+      ),
+      Aluno(
+        nome: "Fulano de tal",
+        responsavel: "Seus pais",
+        telefone: "6799999999",
+        dataNascimento: '',
+        matricula: '',
+      ),
+      Aluno(
+        nome: "Cicraninho",
+        responsavel: "Suas mães",
+        telefone: "679980900",
+        dataNascimento: '',
+        matricula: '',
+      ),
+      Aluno(
+        nome: "Fulano de tal",
+        responsavel: "Seus pais",
+        telefone: "6799999999",
+        dataNascimento: '',
+        matricula: '',
+      ),
+      Aluno(
+        nome: "Cicraninho",
+        responsavel: "Suas mães",
+        telefone: "679980900",
+        dataNascimento: '',
+        matricula: '',
+      ),
     ]);
   }
 }
