@@ -1,4 +1,10 @@
+import 'dart:math';
+
+import 'package:espaco_infantil/models/aluno.dart';
+import 'package:espaco_infantil/models/endereco.dart';
+import 'package:espaco_infantil/repositories/alunos_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddAlunosPage extends StatefulWidget {
   const AddAlunosPage({super.key});
@@ -9,10 +15,33 @@ class AddAlunosPage extends StatefulWidget {
 
 class _AddAlunosPageState extends State<AddAlunosPage> {
   final _formKey = GlobalKey<FormState>();
+  final _formData = Map<String, Object>;
+
   String _name = '';
-  int _age = 0;
-  String _email = '';
+  String _respon = '';
   String _phone = '';
+  String _age = '';
+  final String _matricula = '';
+  String _rua = '';
+  String _bairro = '';
+  String _numero = '';
+  String _foto = '';
+
+  void _submitForm() {
+    _formKey.currentState?.save();
+    final newAluno = Aluno(
+      matricula: Random().nextDouble().toString(),
+      nome: _name,
+      dataNascimento: _age,
+      responsavel: _respon,
+      telefone: _phone,
+      foto: _foto,
+      endereco: Endereco(rua: _rua, bairro: _bairro, numero: _numero),
+    );
+
+    Provider.of<AlunosRepository>(context, listen: false).addAluno(newAluno);
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +54,11 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Nome'),
+                textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Por favor insira o nome!!';
@@ -37,27 +67,12 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                 },
                 onSaved: (value) {
                   _name = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Idade'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira a idade!!';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Por favor insira um numero válido';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _age = int.parse(value!);
                 },
               ),
               const SizedBox(height: 20),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Responsável'),
+                textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Por favor insira o nome!!';
@@ -65,41 +80,13 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira seu email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Por favor insira um email válido';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Endereço'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira o endereço';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
+                  _respon = value!;
                 },
               ),
               const SizedBox(height: 20),
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Telefone'),
+                keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Por favor insira o telefone';
@@ -114,6 +101,82 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                 },
               ),
               const SizedBox(height: 20),
+              TextFormField(
+                decoration:
+                    const InputDecoration(labelText: 'Data de Nascimento'),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.datetime,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor insira a idade!!';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'Por favor insira um numero válido';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _age = value!;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Rua'),
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor insira a Rua';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _rua = value!;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Bairro'),
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor insira o bairro';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _bairro = value!;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Número'),
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor insira o número';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _numero = value!;
+                },
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'foto'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Por favor insira a  url';
+                  }
+
+                  return null;
+                },
+                onSaved: (value) {
+                  _foto = value!;
+                },
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
@@ -121,11 +184,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    //TODO: DELETE - Do something with the form data
-                    print('Name: $_name');
-                    print('Age: $_age');
-                    print('Email: $_email');
-                    print('Email: $_phone');
+                    _submitForm();
                   }
                 },
                 child: const Text('Cadastrar'),

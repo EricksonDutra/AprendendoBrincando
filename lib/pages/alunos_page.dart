@@ -20,6 +20,16 @@ class _AlunosPageState extends State<AlunosPage> {
         appBar: AppBar(
           backgroundColor: Colors.pinkAccent,
           title: Center(child: Text(aluno.nome)),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(Icons.edit),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Icon(Icons.delete),
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(
@@ -38,9 +48,17 @@ class _AlunosPageState extends State<AlunosPage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Center(
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(40.0),
+                    child: Image.network(
+                      aluno.foto,
+                      width: 150,
+                    )),
+              ),
               const Padding(padding: EdgeInsets.only(top: 24)),
-              const Text('Matrícula: ${'widget.aluno.matricula'}',
-                  style: TextStyle(
+              Text('Matrícula: ${aluno.matricula}',
+                  style: const TextStyle(
                       fontSize: 22,
                       fontFamily: 'Verdana',
                       color: Colors.grey,
@@ -48,18 +66,20 @@ class _AlunosPageState extends State<AlunosPage> {
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: ListTile(
-                  title: const Text('widget.aluno.matricula'),
-                  subtitle: const Text(
-                    ' ${'widget.aluno.nome'} - ${'widget.aluno.responsavel'} - ${'widget.aluno.telefone'}',
-                    style: TextStyle(fontSize: 22),
+                  title: Text('Responsável: ${aluno.responsavel}',
+                      style: const TextStyle(fontSize: 18)),
+                  subtitle: Text(
+                    '''Informações: \nEndereço: ${aluno.endereco.rua}, ${aluno.endereco.numero} - ${aluno.endereco.bairro}
+                    \nData Nascimento: ${aluno.dataNascimento}''',
+                    style: const TextStyle(fontSize: 18),
                   ),
                   trailing: IconButton(
                       onPressed: () {}, icon: const Icon(Icons.phone)),
                 ),
               ),
               const Padding(padding: EdgeInsets.only(top: 24)),
-              const Text('Endereço: ${'widget.aluno.endereco'}',
-                  style: TextStyle(
+              Text('Telefone: ${aluno.telefone}',
+                  style: const TextStyle(
                       fontSize: 22,
                       fontFamily: 'Verdana',
                       color: Colors.grey,
