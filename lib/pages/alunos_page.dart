@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/aluno.dart';
 
 class AlunosPage extends StatefulWidget {
-  final Aluno aluno;
-
   const AlunosPage({
     Key? key,
-    required this.aluno,
   }) : super(key: key);
 
   @override
@@ -16,12 +13,13 @@ class AlunosPage extends StatefulWidget {
 class _AlunosPageState extends State<AlunosPage> {
   @override
   Widget build(BuildContext context) {
+    final Aluno aluno = ModalRoute.of(context)!.settings.arguments as Aluno;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.pinkAccent,
-          title: Center(child: Text(widget.aluno.nome)),
+          title: Center(child: Text(aluno.nome)),
           bottom: const TabBar(
             tabs: [
               Tab(
@@ -41,8 +39,8 @@ class _AlunosPageState extends State<AlunosPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Padding(padding: EdgeInsets.only(top: 24)),
-              Text('Matrícula: ${widget.aluno.matricula}',
-                  style: const TextStyle(
+              const Text('Matrícula: ${'widget.aluno.matricula'}',
+                  style: TextStyle(
                       fontSize: 22,
                       fontFamily: 'Verdana',
                       color: Colors.grey,
@@ -50,15 +48,22 @@ class _AlunosPageState extends State<AlunosPage> {
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: ListTile(
-                  title: Text(widget.aluno.matricula),
-                  subtitle: Text(
-                    ' ${widget.aluno.nome} - ${widget.aluno.responsavel} - ${widget.aluno.telefone}',
-                    style: const TextStyle(fontSize: 22),
+                  title: const Text('widget.aluno.matricula'),
+                  subtitle: const Text(
+                    ' ${'widget.aluno.nome'} - ${'widget.aluno.responsavel'} - ${'widget.aluno.telefone'}',
+                    style: TextStyle(fontSize: 22),
                   ),
                   trailing: IconButton(
                       onPressed: () {}, icon: const Icon(Icons.phone)),
                 ),
               ),
+              const Padding(padding: EdgeInsets.only(top: 24)),
+              const Text('Endereço: ${'widget.aluno.endereco'}',
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontFamily: 'Verdana',
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold)),
             ],
           ),
           Column(

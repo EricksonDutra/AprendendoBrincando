@@ -6,7 +6,8 @@ class Aluno {
   String dataNascimento;
   String responsavel;
   String telefone;
-  List<Endereco> endereco = [];
+  String foto;
+  Endereco endereco;
 
   Aluno({
     required this.matricula,
@@ -14,5 +15,7 @@ class Aluno {
     required this.dataNascimento,
     required this.responsavel,
     required this.telefone,
+    required this.foto,
+    required this.endereco,
   });
 }
