@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/aluno_grid.dart';
 import '../widgets/drawer_widget.dart';
+import 'add_alunos_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -11,6 +12,12 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Espaço Infantil"),
         backgroundColor: Colors.pinkAccent,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(Icons.login),
+          )
+        ],
       ),
       drawer: const DrawerWidget(),
       body: SingleChildScrollView(
@@ -27,6 +34,18 @@ class HomePage extends StatelessWidget {
             const AlunoGrid(),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddAlunosPage(),
+            ),
+          );
+        },
+        backgroundColor: Colors.pinkAccent,
+        child: const Icon(Icons.add_reaction),
       ),
     );
   }
