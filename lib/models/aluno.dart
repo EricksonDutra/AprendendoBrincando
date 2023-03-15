@@ -1,7 +1,7 @@
 import 'endereco.dart';
 
 class Aluno {
-  String matricula;
+  int matricula;
   String nome;
   String dataNascimento;
   String responsavel;

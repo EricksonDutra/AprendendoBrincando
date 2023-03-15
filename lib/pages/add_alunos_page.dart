@@ -30,13 +30,13 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
   void _submitForm() {
     _formKey.currentState?.save();
     final newAluno = Aluno(
-      matricula: Random().nextDouble().toString(),
+      matricula: Random().nextInt(1000),
       nome: _name,
       dataNascimento: _age,
       responsavel: _respon,
       telefone: _phone,
       foto: _foto,
-      endereco: Endereco(rua: _rua, bairro: _bairro, numero: _numero),
+      endereco: Endereco(rua: _rua, bairro: _bairro, numero: _numero, id: 0),
     );
 
     Provider.of<AlunosRepository>(context, listen: false).addAluno(newAluno);
