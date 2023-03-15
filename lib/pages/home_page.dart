@@ -1,10 +1,19 @@
+import 'package:espaco_infantil/controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/aluno_grid.dart';
 import '../widgets/drawer_widget.dart';
 import 'add_alunos_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var controller = ThemeController.to;
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +21,27 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Espaço Infantil"),
         backgroundColor: Colors.pinkAccent,
-        actions: const [
-          Padding(
+        actions: [
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Icon(Icons.login),
+          ),
+          PopupMenuButton(
+            child: const Icon(Icons.more_vert),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                  child: ListTile(
+                leading: Obx(() => controller.isDark.value
+                    ? const Icon(Icons.brightness_7)
+                    : const Icon(Icons.brightness_2)),
+                title: Obx(
+                  () => controller.isDark.value
+                      ? const Text('Light')
+                      : const Text('Dark'),
+                ),
+                onTap: () => controller.changeTheme(),
+              ))
+            ],
           )
         ],
       ),
