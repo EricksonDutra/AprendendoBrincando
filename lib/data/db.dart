@@ -26,7 +26,7 @@ class DB {
       version: 1,
       onCreate: (db, versao) async {
         await db.execute(alunos);
-        await db.execute(enderecos);
+        // await db.execute(enderecos);
         await setupAlunos(db);
       },
     );
@@ -40,9 +40,9 @@ class DB {
         'responsavel': aluno.responsavel,
         'dataNascimento': aluno.dataNascimento,
         'foto': aluno.foto,
-        'rua': aluno.endereco.rua,
-        'numero': aluno.endereco.numero,
-        'bairro': aluno.endereco.bairro
+        'rua': aluno.rua,
+        'numero': aluno.numero,
+        'bairro': aluno.bairro
       });
     }
   }
@@ -61,14 +61,14 @@ CREATE TABLE alunos(
   bairro Text
 );
 ''';
-  String get enderecos => '''
-CREATE TABLE enderecos(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  rua TEXT,
-  bairro TEXT,
-  numero TEXT,
-  aluno_mat INTEGER,
-  FOREIGN KEY (aluno_mat) REFERENCES alunos(matricula) ON DELETE CASCADE
-);
-''';
+//   String get enderecos => '''
+// CREATE TABLE enderecos(
+//   id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   rua TEXT,
+//   bairro TEXT,
+//   numero TEXT,
+//   aluno_mat INTEGER,
+//   FOREIGN KEY (aluno_mat) REFERENCES alunos(matricula) ON DELETE CASCADE
+// );
+// ''';
 }

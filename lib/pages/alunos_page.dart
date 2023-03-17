@@ -1,5 +1,8 @@
+import 'package:espaco_infantil/repositories/alunos_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/aluno.dart';
+import '../utils/routes.dart';
 
 class AlunosPage extends StatefulWidget {
   const AlunosPage({
@@ -20,14 +23,48 @@ class _AlunosPageState extends State<AlunosPage> {
         appBar: AppBar(
           backgroundColor: Colors.pinkAccent,
           title: Center(child: Text(aluno.nome)),
-          actions: const [
+          actions: [
             Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.edit),
+              padding: const EdgeInsets.all(10.0),
+              child: IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      Routes.ALUNO_ADD_ALUNOS_PAGE,
+                      arguments: aluno,
+                    );
+                  }),
             ),
             Padding(
-              padding: EdgeInsets.all(10),
-              child: Icon(Icons.delete),
+              padding: const EdgeInsets.all(10),
+              child: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Excluir Produto'),
+                      content: const Text('Tem certeza?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Não'),
+                        ),
+                        TextButton(
+                          child: const Text('Sim'),
+                          onPressed: () {
+                            Provider.of<AlunosRepository>(
+                              context,
+                              listen: false,
+                            ).deleteAluno(aluno);
+                            Navigator.of(context).pushNamed(Routes.HOME);
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ],
           bottom: const TabBar(
@@ -69,7 +106,7 @@ class _AlunosPageState extends State<AlunosPage> {
                   title: Text('Responsável: ${aluno.responsavel}',
                       style: const TextStyle(fontSize: 18)),
                   subtitle: Text(
-                    '''Informações: \nEndereço: ${aluno.endereco.rua}, ${aluno.endereco.numero} - ${aluno.endereco.bairro}
+                    '''Informações: \nEndereço: ${aluno.rua}, ${aluno.numero} - \n${aluno.bairro}
                     \nData Nascimento: ${aluno.dataNascimento}''',
                     style: const TextStyle(fontSize: 18),
                   ),

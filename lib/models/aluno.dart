@@ -1,4 +1,5 @@
-import 'endereco.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// import 'endereco.dart';
 
 class Aluno {
   int matricula;
@@ -7,7 +8,10 @@ class Aluno {
   String responsavel;
   String telefone;
   String foto;
-  Endereco endereco;
+  String rua;
+  String bairro;
+  String numero;
+  // Endereco endereco;
 
   Aluno({
     required this.matricula,
@@ -16,6 +20,8 @@ class Aluno {
     required this.responsavel,
     required this.telefone,
     required this.foto,
-    required this.endereco,
+    required this.rua,
+    required this.bairro,
+    required this.numero,
   });
 }

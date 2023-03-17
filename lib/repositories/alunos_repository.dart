@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:espaco_infantil/data/dummy_data.dart';
 import 'package:espaco_infantil/models/aluno.dart';
-import 'package:espaco_infantil/models/endereco.dart';
 import 'package:flutter/material.dart';
 
 import '../data/db.dart';
@@ -23,6 +24,47 @@ class AlunosRepository extends ChangeNotifier {
   void addAluno(Aluno aluno) async {
     _lista.add(aluno);
     notifyListeners();
+  }
+
+  void saveAluno(Map<String, Object> data) {
+    bool hasMat = data['mat'] != null;
+
+    final aluno = Aluno(
+      matricula: hasMat ? data['mat'] as int : Random().nextInt(1000),
+      nome: data['nome'] as String,
+      dataNascimento: data['dataNascimento'] as String,
+      bairro: data['bairro'] as String,
+      numero: data['numero'] as String,
+      rua: data['rua'] as String,
+      foto: data['foto'] as String,
+      responsavel: data['responsavel'] as String,
+      telefone: data['telefone'] as String,
+      // endereco: data['endereco'] as String,
+    );
+
+    if (hasMat) {
+      updateAluno(aluno);
+    } else {
+      addAluno(aluno);
+    }
+  }
+
+  void updateAluno(Aluno aluno) {
+    int index = _lista.indexWhere((el) => el.matricula == aluno.matricula);
+
+    if (index >= 0) {
+      _lista[index] = aluno;
+      notifyListeners();
+    }
+  }
+
+  void deleteAluno(Aluno aluno) {
+    int index = _lista.indexWhere((el) => el.matricula == aluno.matricula);
+
+    if (index >= 0) {
+      _lista.removeWhere((el) => el.matricula == aluno.matricula);
+      notifyListeners();
+    }
   }
 
   saveAll(List<Aluno> alunos) {
@@ -57,8 +99,9 @@ class AlunosRepository extends ChangeNotifier {
         responsavel: al['responsavel'],
         dataNascimento: al['dataNascimento'],
         foto: al['foto'],
-        endereco:
-            Endereco(rua: 'rua', bairro: 'bairro', numero: 'numero', id: 0),
+        rua: 'rua',
+        bairro: 'bairro',
+        numero: 'numero',
       );
       _lista.add(aluno);
     }

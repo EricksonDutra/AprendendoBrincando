@@ -1,5 +1,7 @@
 import 'package:espaco_infantil/controllers/theme_controller.dart';
+import 'package:espaco_infantil/pages/add_alunos_page.dart';
 import 'package:espaco_infantil/pages/alunos_page.dart';
+import 'package:espaco_infantil/pages/home_page.dart';
 import 'package:espaco_infantil/pages/splash_page.dart';
 import 'package:espaco_infantil/repositories/alunos_repository.dart';
 import 'package:espaco_infantil/utils/routes.dart';
@@ -46,7 +48,11 @@ class MyApp extends StatelessWidget {
         ),
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
-        routes: {Routes.ALUNO_PAGE: (ctx) => const AlunosPage()},
+        routes: {
+          Routes.HOME: (ctx) => const HomePage(),
+          Routes.ALUNO_PAGE: (ctx) => const AlunosPage(),
+          Routes.ALUNO_ADD_ALUNOS_PAGE: (ctx) => const AddAlunosPage(),
+        },
       ),
     );
   }

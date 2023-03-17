@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:espaco_infantil/models/aluno.dart';
-import 'package:espaco_infantil/models/endereco.dart';
 import 'package:espaco_infantil/repositories/alunos_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,35 @@ class AddAlunosPage extends StatefulWidget {
 
 class _AddAlunosPageState extends State<AddAlunosPage> {
   final _formKey = GlobalKey<FormState>();
-  final _formData = Map<String, Object>;
+  // ignore: prefer_collection_literals
+  final _formData = Map<String, Object>();
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      if (arg != null) {
+        final aluno = arg as Aluno;
+        _formData['id'] = aluno.matricula;
+        _formData['nome'] = aluno.nome;
+        _formData['responsavel'] = aluno.responsavel;
+        _formData['dataNascimento'] = aluno.dataNascimento;
+        _formData['telefone'] = aluno.telefone;
+        _formData['rua'] = aluno.rua;
+        _formData['numero'] = aluno.numero;
+        _formData['bairro'] = aluno.bairro;
+        _formData['foto'] = aluno.foto;
+      }
+    }
+  }
 
   String _name = '';
   String _respon = '';
@@ -36,7 +63,9 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
       responsavel: _respon,
       telefone: _phone,
       foto: _foto,
-      endereco: Endereco(rua: _rua, bairro: _bairro, numero: _numero, id: 0),
+      rua: _rua,
+      bairro: _bairro,
+      numero: _numero,
     );
 
     Provider.of<AlunosRepository>(context, listen: false).addAluno(newAluno);
@@ -57,6 +86,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _formData['nome']?.toString(),
                 decoration: const InputDecoration(labelText: 'Nome'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -71,6 +101,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['responsavel']?.toString(),
                 decoration: const InputDecoration(labelText: 'Responsável'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -85,6 +116,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['telefone']?.toString(),
                 decoration: const InputDecoration(labelText: 'Telefone'),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
@@ -102,6 +134,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['dataNascimento']?.toString(),
                 decoration:
                     const InputDecoration(labelText: 'Data de Nascimento'),
                 textInputAction: TextInputAction.next,
@@ -121,6 +154,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['rua']?.toString(),
                 decoration: const InputDecoration(labelText: 'Rua'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -135,6 +169,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['bairro']?.toString(),
                 decoration: const InputDecoration(labelText: 'Bairro'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -149,6 +184,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['numero']?.toString(),
                 decoration: const InputDecoration(labelText: 'Número'),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -164,6 +200,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: _formData['foto']?.toString(),
                 decoration: const InputDecoration(labelText: 'foto'),
                 validator: (value) {
                   if (value!.isEmpty) {
