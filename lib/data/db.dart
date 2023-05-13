@@ -1,6 +1,7 @@
 import 'package:espaco_infantil/repositories/alunos_repository.dart';
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 import '../models/aluno.dart';
 
@@ -20,13 +21,13 @@ class DB {
     return await DB.instance.database;
   }
 
-  initDatabase() async {
-    return await openDatabase(
-      join(await getDatabasesPath(), 'dados.db'),
+ Future<sql.Database> initDatabase() async {
+    final dbPath = await sql.getDatabasesPath();
+    return sql.openDatabase(
+      path.join(dbPath, 'dados.db'),
       version: 1,
       onCreate: (db, versao) async {
         await db.execute(alunos);
-        // await db.execute(enderecos);
         await setupAlunos(db);
       },
     );

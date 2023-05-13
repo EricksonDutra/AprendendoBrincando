@@ -21,33 +21,33 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Espaço Infantil"),
         backgroundColor: Colors.pinkAccent,
-        actions: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.login),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.find_replace_rounded),
-          ),
-          PopupMenuButton(
-            child: const Icon(Icons.more_vert),
-            itemBuilder: (_) => [
-              PopupMenuItem(
-                  child: ListTile(
-                leading: Obx(() => controller.isDark.value
-                    ? const Icon(Icons.brightness_7)
-                    : const Icon(Icons.brightness_2)),
-                title: Obx(
-                  () => controller.isDark.value
-                      ? const Text('Light')
-                      : const Text('Dark'),
-                ),
-                onTap: () => controller.changeTheme(),
-              ))
-            ],
-          )
-        ],
+        // actions: [
+        //   const Padding(
+        //     padding: EdgeInsets.all(8.0),
+        //     child: Icon(Icons.login),
+        //   ),
+        //   const Padding(
+        //     padding: EdgeInsets.all(8.0),
+        //     child: Icon(Icons.find_replace_rounded),
+        //   ),
+        //   PopupMenuButton(
+        //     child: const Icon(Icons.more_vert),
+        //     itemBuilder: (_) => [
+        //       PopupMenuItem(
+        //           child: ListTile(
+        //         leading: Obx(() => controller.isDark.value
+        //             ? const Icon(Icons.brightness_7)
+        //             : const Icon(Icons.brightness_2)),
+        //         title: Obx(
+        //           () => controller.isDark.value
+        //               ? const Text('Light')
+        //               : const Text('Dark'),
+        //         ),
+        //         onTap: () => controller.changeTheme(),
+        //       ))
+        //     ],
+        //   )
+        // ],
       ),
       drawer: const DrawerWidget(),
       body: SingleChildScrollView(

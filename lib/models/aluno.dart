@@ -1,16 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// import 'endereco.dart';
+import 'package:flutter/material.dart';
 
-class Aluno {
-  int matricula;
-  String nome;
-  String dataNascimento;
-  String responsavel;
-  String telefone;
-  String foto;
-  String rua;
-  String bairro;
-  String numero;
+class Aluno with ChangeNotifier {
+  final int matricula;
+  final String nome;
+  final String dataNascimento;
+  final String responsavel;
+  final String telefone;
+  final String foto;
+  final String rua;
+  final String bairro;
+  final String numero;
   // Endereco endereco;
 
   Aluno({

@@ -16,6 +16,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
   final _formKey = GlobalKey<FormState>();
   // ignore: prefer_collection_literals
   final _formData = Map<String, Object>();
+  // final _imageUrlController = TextEditingController();
 
   @override
   void dispose() {
@@ -199,19 +200,45 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
                 },
               ),
               const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['foto']?.toString(),
-                decoration: const InputDecoration(labelText: 'foto'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira a  url';
-                  }
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: _formData['foto']?.toString(),
+                      decoration: const InputDecoration(labelText: 'foto'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira a  url';
+                        }
 
-                  return null;
-                },
-                onSaved: (value) {
-                  _foto = value!;
-                },
+                        return null;
+                      },
+                      // controller: _imageUrlController,
+                      onSaved: (value) {
+                        _foto = value!;
+                      },
+                    ),
+                  ),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    margin: const EdgeInsets.only(top: 10, left: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1,
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    //   child: _imageUrlController.text.isEmpty
+                    //       ? const Text('Informe a Url')
+                    //       : FittedBox(
+                    //           fit: BoxFit.cover,
+                    //           child: Image.network(_imageUrlController.text),
+                    //         ),
+                  )
+                ],
               ),
               const SizedBox(height: 20),
               ElevatedButton(

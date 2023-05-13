@@ -1,32 +1,51 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:espaco_infantil/data/dummy_data.dart';
 import 'package:espaco_infantil/models/aluno.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../data/db.dart';
 
-class AlunosRepository extends ChangeNotifier {
-  final List<Aluno> _lista = dummyAlunos;
-  // final List<Aluno> _alunos = dummyAlunos;
-
-  List<Aluno> get alunos => [..._lista];
+class AlunosRepository with ChangeNotifier {
+  // final List<Aluno> _lista = dummyAlunos;
+  final List<Aluno> _lista = [];
 
   // UnmodifiableListView<Aluno> get lista => UnmodifiableListView(_lista);
+  List<Aluno> get alunos => [..._lista];
 
-  getAlunos(aluno) async {
+  getAlunos(Aluno aluno) async {
     var db = await DB.get();
-    var results = await db.query('alunos', whereArgs: [aluno]);
+    var results =
+        await db.query('alunos', where: 'data[mat] = ?', whereArgs: [aluno]);
     List<Aluno> alunos = [];
     return alunos;
   }
 
-  void addAluno(Aluno aluno) async {
-    _lista.add(aluno);
-    notifyListeners();
+  Future<void> addAluno(Aluno aluno) async {
+    http
+        .post(
+            Uri.parse(
+                'https://aprendendobrincando-cb06f-default-rtdb.firebaseio.com/aluno.json'),
+            body: jsonEncode({
+              "nome": aluno.nome,
+              "dataNascimento": aluno.dataNascimento,
+              "responsavel": aluno.responsavel,
+              "telefone": aluno.telefone,
+              "foto": aluno.foto,
+              "rua": aluno.rua,
+              "bairro": aluno.bairro,
+              "numero": aluno.numero
+            }))
+        .then((res) {
+      // print(jsonDecode(res.body));
+      _lista.add(aluno);
+      notifyListeners();
+    });
   }
 
-  void saveAluno(Map<String, Object> data) {
+  Future<void> saveAluno(Map<String, Object> data) async {
     bool hasMat = data['mat'] != null;
 
     final aluno = Aluno(
@@ -49,7 +68,7 @@ class AlunosRepository extends ChangeNotifier {
     }
   }
 
-  void updateAluno(Aluno aluno) {
+  Future<void> updateAluno(Aluno aluno) async {
     int index = _lista.indexWhere((el) => el.matricula == aluno.matricula);
 
     if (index >= 0) {
@@ -58,13 +77,9 @@ class AlunosRepository extends ChangeNotifier {
     }
   }
 
-  void deleteAluno(Aluno aluno) {
-    int index = _lista.indexWhere((el) => el.matricula == aluno.matricula);
-
-    if (index >= 0) {
-      _lista.removeWhere((el) => el.matricula == aluno.matricula);
-      notifyListeners();
-    }
+  Future<void> deleteAluno(Aluno aluno) async {
+    _lista.remove(aluno);
+    notifyListeners();
   }
 
   saveAll(List<Aluno> alunos) {
@@ -74,13 +89,8 @@ class AlunosRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  remove(Aluno aluno) {
-    _lista.remove(aluno);
-    notifyListeners();
-  }
-
   static setupAlunos() {
-    return dummyAlunos;
+    return [];
   }
 
   AlunosRepository() {
@@ -99,17 +109,12 @@ class AlunosRepository extends ChangeNotifier {
         responsavel: al['responsavel'],
         dataNascimento: al['dataNascimento'],
         foto: al['foto'],
-        rua: 'rua',
-        bairro: 'bairro',
-        numero: 'numero',
+        rua: al['rua'],
+        bairro: al['bairro'],
+        numero: al['numero'],
       );
       _lista.add(aluno);
     }
     notifyListeners();
   }
 }
-
-  // AlunosRepository() {
-  //   _lista.addAll(dummyAlunos);
-  // }
-

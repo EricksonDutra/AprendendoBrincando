@@ -83,7 +83,7 @@ class _AlunosPageState extends State<AlunosPage> {
         ),
         body: TabBarView(children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
                 child: ClipRRect(

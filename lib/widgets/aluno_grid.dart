@@ -17,12 +17,16 @@ class AlunoGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(10),
       itemCount: aluno.length,
-      itemBuilder: (ctx, i) => AlunoWidget(aluno: aluno[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider<ChangeNotifier>.value(
+        value: aluno[i],
+        child: AlunoWidget(aluno: aluno[i]),
+      ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10),
+        crossAxisCount: 2,
+        childAspectRatio: 3 / 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
     );
   }
 }
