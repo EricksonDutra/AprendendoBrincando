@@ -1,6 +1,8 @@
-import 'package:espaco_infantil/controllers/theme_controller.dart';
+// import 'package:espaco_infantil/controllers/theme_controller.dart';
+import 'package:espaco_infantil/repositories/alunos_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import '../controllers/theme_controller.dart';
 import '../widgets/aluno_grid.dart';
 import '../widgets/drawer_widget.dart';
 import 'add_alunos_page.dart';
@@ -14,6 +16,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var controller = ThemeController.to;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AlunosRepository>(
+      context,
+      listen: false,
+    ).loadAlunos().then((value) => {
+          setState(() {
+            _isLoading = false;
+          })
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +66,23 @@ class _HomePageState extends State<HomePage> {
         // ],
       ),
       drawer: const DrawerWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/val.jpg',
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.5,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'images/val.jpg',
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                  const SizedBox(height: 10),
+                  const AlunoGrid(),
+                ],
+              ),
             ),
-            const SizedBox(height: 10),
-            const AlunoGrid(),
-          ],
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

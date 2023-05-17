@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:espaco_infantil/repositories/alunos_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,7 @@ class AlunosPage extends StatefulWidget {
 class _AlunosPageState extends State<AlunosPage> {
   @override
   Widget build(BuildContext context) {
+    final msg = ScaffoldMessenger.of(context);
     final Aluno aluno = ModalRoute.of(context)!.settings.arguments as Aluno;
     return DefaultTabController(
       length: 2,
@@ -47,8 +50,8 @@ class _AlunosPageState extends State<AlunosPage> {
                       content: const Text('Tem certeza?'),
                       actions: [
                         TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
                           child: const Text('Não'),
+                          onPressed: () => Navigator.of(context).pop(false),
                         ),
                         TextButton(
                           child: const Text('Sim'),
@@ -57,12 +60,27 @@ class _AlunosPageState extends State<AlunosPage> {
                               context,
                               listen: false,
                             ).deleteAluno(aluno);
-                            Navigator.of(context).pushNamed(Routes.HOME);
+                            Navigator.of(context).pop(true);
                           },
                         )
                       ],
                     ),
-                  );
+                  ).then((value) async {
+                    if (value ?? false) {
+                      try {
+                        await Provider.of<AlunosRepository>(
+                          context,
+                          listen: false,
+                        ).deleteAluno(aluno);
+                      } on HttpException catch (error) {
+                        msg.showSnackBar(SnackBar(
+                          content: Text(
+                            error.toString(),
+                          ),
+                        ));
+                      }
+                    }
+                  });
                 },
               ),
             ),

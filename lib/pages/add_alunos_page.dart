@@ -14,9 +14,18 @@ class AddAlunosPage extends StatefulWidget {
 
 class _AddAlunosPageState extends State<AddAlunosPage> {
   final _formKey = GlobalKey<FormState>();
-  // ignore: prefer_collection_literals
-  final _formData = Map<String, Object>();
-  // final _imageUrlController = TextEditingController();
+  final _formData = <String, Object>{};
+
+  final _imageUrlFocus = FocusNode();
+  final _imageUrlController = TextEditingController();
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // _imageUrlFocus.addListener(updateImage);
+  }
 
   @override
   void dispose() {
@@ -32,7 +41,7 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
 
       if (arg != null) {
         final aluno = arg as Aluno;
-        _formData['id'] = aluno.matricula;
+        _formData['matricula'] = aluno.matricula;
         _formData['nome'] = aluno.nome;
         _formData['responsavel'] = aluno.responsavel;
         _formData['dataNascimento'] = aluno.dataNascimento;
@@ -45,32 +54,39 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
     }
   }
 
-  String _name = '';
-  String _respon = '';
-  String _phone = '';
-  String _age = '';
-  final String _matricula = '';
-  String _rua = '';
-  String _bairro = '';
-  String _numero = '';
-  String _foto = '';
+  Future<void> _submitForm() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
 
-  void _submitForm() {
+    if (!isValid) {
+      return;
+    }
+
     _formKey.currentState?.save();
-    final newAluno = Aluno(
-      matricula: Random().nextInt(1000),
-      nome: _name,
-      dataNascimento: _age,
-      responsavel: _respon,
-      telefone: _phone,
-      foto: _foto,
-      rua: _rua,
-      bairro: _bairro,
-      numero: _numero,
-    );
 
-    Provider.of<AlunosRepository>(context, listen: false).addAluno(newAluno);
-    Navigator.of(context).pop();
+    setState(() => _isLoading = true);
+    try {
+      await Provider.of<AlunosRepository>(
+        context,
+        listen: false,
+      ).saveAluno(_formData);
+    } catch (error) {
+      await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text('Ocorreu um erro!!'),
+                content: const Text(
+                    '😢 entre em contato com Erickson e diga que falhou na hora de salvar!!'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Ok'),
+                  )
+                ],
+              ));
+    } finally {
+      setState(() => _isLoading = false);
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -80,183 +96,179 @@ class _AddAlunosPageState extends State<AddAlunosPage> {
         backgroundColor: Colors.pinkAccent,
         title: const Text('Cadastro de aluno'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                initialValue: _formData['nome']?.toString(),
-                decoration: const InputDecoration(labelText: 'Nome'),
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira o nome!!';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['responsavel']?.toString(),
-                decoration: const InputDecoration(labelText: 'Responsável'),
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira o nome!!';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _respon = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['telefone']?.toString(),
-                decoration: const InputDecoration(labelText: 'Telefone'),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira o telefone';
-                  }
-                  if (value.length < 8) {
-                    return 'Por favor insira um telefone válido';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _phone = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['dataNascimento']?.toString(),
-                decoration:
-                    const InputDecoration(labelText: 'Data de Nascimento'),
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.datetime,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira a idade!!';
-                  }
-                  if (int.tryParse(value) == null) {
-                    return 'Por favor insira um numero válido';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _age = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['rua']?.toString(),
-                decoration: const InputDecoration(labelText: 'Rua'),
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira a Rua';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _rua = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['bairro']?.toString(),
-                decoration: const InputDecoration(labelText: 'Bairro'),
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira o bairro';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _bairro = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                initialValue: _formData['numero']?.toString(),
-                decoration: const InputDecoration(labelText: 'Número'),
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor insira o número';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _numero = value!;
-                },
-              ),
-              const SizedBox(height: 20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      initialValue: _formData['foto']?.toString(),
-                      decoration: const InputDecoration(labelText: 'foto'),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    TextFormField(
+                      initialValue: _formData['nome']?.toString(),
+                      decoration: const InputDecoration(
+                        labelText: 'Nome',
+                      ),
+                      textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Por favor insira a  url';
+                          return 'Por favor insira o nome!!';
                         }
-
                         return null;
                       },
-                      // controller: _imageUrlController,
-                      onSaved: (value) {
-                        _foto = value!;
+                      onSaved: (nome) => _formData['nome'] = nome ?? '',
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      initialValue: _formData['responsavel']?.toString(),
+                      decoration:
+                          const InputDecoration(labelText: 'Responsável'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira o nome!!';
+                        }
+                        return null;
                       },
+                      onSaved: (responsavel) =>
+                          _formData['responsavel'] = responsavel ?? '',
                     ),
-                  ),
-                  Container(
-                    height: 100,
-                    width: 100,
-                    margin: const EdgeInsets.only(top: 10, left: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 1,
-                      ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      initialValue: _formData['telefone']?.toString(),
+                      decoration: const InputDecoration(labelText: 'Telefone'),
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira o telefone';
+                        }
+                        if (value.length < 8) {
+                          return 'Por favor insira um telefone válido';
+                        }
+                        return null;
+                      },
+                      onSaved: (telefone) =>
+                          _formData['telefone'] = telefone ?? '',
                     ),
-                    alignment: Alignment.center,
-                    //   child: _imageUrlController.text.isEmpty
-                    //       ? const Text('Informe a Url')
-                    //       : FittedBox(
-                    //           fit: BoxFit.cover,
-                    //           child: Image.network(_imageUrlController.text),
-                    //         ),
-                  )
-                ],
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      initialValue: _formData['dataNascimento']?.toString(),
+                      decoration: const InputDecoration(
+                          labelText: 'Data de Nascimento'),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.datetime,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira a idade!!';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Por favor insira um numero válido';
+                        }
+                        return null;
+                      },
+                      onSaved: (dataNascimento) =>
+                          _formData['dataNascimento'] = dataNascimento ?? '',
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      initialValue: _formData['rua']?.toString(),
+                      decoration: const InputDecoration(labelText: 'Rua'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira a Rua';
+                        }
+                        return null;
+                      },
+                      onSaved: (rua) => _formData['rua'] = rua ?? '',
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      initialValue: _formData['bairro']?.toString(),
+                      decoration: const InputDecoration(labelText: 'Bairro'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira o bairro';
+                        }
+                        return null;
+                      },
+                      onSaved: (bairro) => _formData['bairro'] = bairro ?? '',
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      initialValue: _formData['numero']?.toString(),
+                      decoration: const InputDecoration(labelText: 'Número'),
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Por favor insira o número';
+                        }
+                        return null;
+                      },
+                      onSaved: (numero) => _formData['numero'] = numero ?? '',
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: _formData['foto']?.toString(),
+                            decoration:
+                                const InputDecoration(labelText: 'foto'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor insira a  url';
+                              }
+
+                              return null;
+                            },
+                            onSaved: (foto) => _formData['foto'] = foto ?? '',
+
+                            // controller: _imageUrlController,
+                          ),
+                        ),
+                        Container(
+                          height: 100,
+                          width: 100,
+                          margin: const EdgeInsets.only(top: 10, left: 10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          //   child: _imageUrlController.text.isEmpty
+                          //       ? const Text('Informe a Url')
+                          //       : FittedBox(
+                          //           fit: BoxFit.cover,
+                          //           child: Image.network(_imageUrlController.text),
+                          //         ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.pinkAccent)),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          _submitForm();
+                        }
+                      },
+                      child: const Text('Cadastrar'),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.pinkAccent)),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    _submitForm();
-                  }
-                },
-                child: const Text('Cadastrar'),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

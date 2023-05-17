@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Aluno with ChangeNotifier {
-  final int matricula;
+  final String matricula;
   final String nome;
   final String dataNascimento;
   final String responsavel;
